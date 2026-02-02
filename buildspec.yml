@@ -30,7 +30,3 @@ phases:
           echo "Applying infrastructure"
           terraform apply -auto-approve
         fi
-
-  post_build:
-    commands:
-      - echo "Terraform execution completed"
