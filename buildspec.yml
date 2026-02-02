@@ -1,0 +1,25 @@
+version: 0.2
+
+env:
+  variables:
+    DESTROY: "false"   # true = destroy, false = deploy
+
+phases:
+  install:
+    commands:
+      - echo "Installing Terraform"
+      - yum install -y terraform
+
+  build:
+    commands:
+      - echo "Running Terraform"
+      - cd terraform
+      - terraform init
+      - |
+        if [ "$DESTROY" = "true" ]; then
+          echo "DESTROY=true → Destroying infra"
+          terraform apply -auto-approve -var="create_infra=false"
+        else
+          echo "DESTROY=false → Creating infra"
+          terraform apply -auto-approve -var="create_infra=true"
+        fi
