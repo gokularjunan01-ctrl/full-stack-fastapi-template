@@ -5,3 +5,8 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
