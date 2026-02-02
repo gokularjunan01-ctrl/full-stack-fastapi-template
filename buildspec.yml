@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    DESTROY: "false"   # true = destroy, false = apply
+    DESTROY: "true"   # true = destroy, false = apply
 
 phases:
   install:
