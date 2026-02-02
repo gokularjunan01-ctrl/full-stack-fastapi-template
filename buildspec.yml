@@ -2,24 +2,35 @@ version: 0.2
 
 env:
   variables:
-    DESTROY: "false"   # true = destroy, false = deploy
+    DESTROY: "false"   # true = destroy, false = apply
 
 phases:
   install:
     commands:
       - echo "Installing Terraform"
+      - yum install -y yum-utils
+      - yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
       - yum install -y terraform
+
+  pre_build:
+    commands:
+      - echo "Entering terraform directory"
+      - cd terraform
+      - terraform version
+      - terraform init
 
   build:
     commands:
-      - echo "Running Terraform"
-      - cd terraform
-      - terraform init
+      - echo "DESTROY flag is $DESTROY"
       - |
         if [ "$DESTROY" = "true" ]; then
-          echo "DESTROY=true → Destroying infra"
-          terraform apply -auto-approve -var="create_infra=false"
+          echo "Destroying infrastructure"
+          terraform destroy -auto-approve
         else
-          echo "DESTROY=false → Creating infra"
-          terraform apply -auto-approve -var="create_infra=true"
+          echo "Applying infrastructure"
+          terraform apply -auto-approve
         fi
+
+  post_build:
+    commands:
+      - echo "Terraform execution completed"
